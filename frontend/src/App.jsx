@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Shield, Activity, AlertTriangle, Wifi, WifiOff } from 'lucide-react';
+import { Shield, Activity, AlertTriangle} from 'lucide-react';
 import NetworkBackground from './components/NetworkBackground';
 import NetworkGraph from './components/NetworkGraph';
 import ActivityLog from './components/ActivityLog';
@@ -98,7 +98,7 @@ export default function App() {
                 Network Intrusion Detection System
               </h1>
             </div>
-   
+            
           </div>
 
           {/* Stats Bar */}

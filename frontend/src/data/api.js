@@ -34,9 +34,11 @@ apiClient.interceptors.response.use(
 );
 
 // API Methods
+
 export const predictConnection = async (data) => {
     // The frontend only collects 8 key features.
-    // We fill the remaining 33 with safe defaults before sending to the backend.
+    // We fill the remaining 31 with safe defaults before sending to the backend.
+    // Note: num_outbound_cmds and is_host_login are dropped by the backend — removed from payload.
     const response = await apiClient.post('/api/predict', {
         // ── 8 features from the form ──────────────────────────────────────
         duration:          data.duration          ?? 0,
@@ -48,7 +50,7 @@ export const predictConnection = async (data) => {
         serror_rate:       data.serror_rate       ?? 0.0,
         dst_host_count:    data.dst_host_count    ?? 0,
 
-        // ── remaining 33 features — safe neutral defaults ─────────────────
+        // ── remaining 31 features — safe neutral defaults ─────────────────
         service:                      'http',
         flag:                         'SF',
         land:                         0,
@@ -63,10 +65,8 @@ export const predictConnection = async (data) => {
         num_file_creations:           0,
         num_shells:                   0,
         num_access_files:             0,
-        num_outbound_cmds:            0,
-        is_host_login:                0,
         is_guest_login:               0,
-        srv_count:                    data.count      ?? 0,
+        srv_count:                    data.count       ?? 0,
         srv_serror_rate:              data.serror_rate ?? 0.0,
         rerror_rate:                  0.0,
         srv_rerror_rate:              0.0,
@@ -110,8 +110,8 @@ export const getModelStatus = async () => {
 
     return {
         online:       true,
-        modelVersion: `${r.kernel}-svm-pca${r.n_pca_components}`,
-        accuracy:     parseFloat((r.test_accuracy * 100).toFixed(2)),
+        modelVersion: `${r.chosen_kernel}-svm-pca${r.n_pca_components}`,
+        accuracy:     parseFloat((r.test_acc * 100).toFixed(2)),
         lastUpdated:  new Date().toISOString(),
     };
 };
@@ -120,7 +120,5 @@ export const getPredictionHistory = async () => {
     // History is tracked in frontend state, not stored in backend
     return [];
 };
-
-
 
 export default apiClient;
