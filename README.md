@@ -227,7 +227,7 @@ POST http://localhost:8000/api/predict
 ## Frontend .env Configuration
 
 ```
-VITE_API_URL=http://localhost:8000
+VITE_API_URL='YOUR HOST'
 VITE_USE_MOCK=false
 ```
 
