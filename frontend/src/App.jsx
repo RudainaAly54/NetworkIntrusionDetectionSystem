@@ -81,10 +81,11 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0f1e] text-white overflow-hidden">
-      <NetworkBackground />
 
-      <div className="relative z-10 p-6">
+    
+
+      <main className="relative z-10 p-6 min-h-screen bg-[#0a0f1e] text-white overflow-hidden">
+          <NetworkBackground />
         {/* Header */}
         <motion.header
           initial={{ opacity: 0, y: -20 }}
@@ -93,37 +94,37 @@ export default function App() {
         >
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-3">
-              <Shield className="w-8 h-8 text-cyan-400" />
+              <Shield className="w-8 h-8 text-cyan-400" aria-hidden="true" />
               <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
                 Network Intrusion Detection System
               </h1>
             </div>
-            
           </div>
 
           {/* Stats Bar */}
-          <div className="mt-4 grid grid-cols-3 gap-4">
+          <dl className="mt-4 grid grid-cols-3 gap-4">
             <div className="bg-gray-900/40 backdrop-blur-sm rounded-lg border border-cyan-500/20 p-3">
-              <div className="text-xs text-gray-500 font-mono mb-1">Total Analyzed</div>
-              <div className="text-2xl font-bold text-cyan-400 font-mono">{stats.total}</div>
+              <dt className="text-xs text-gray-500 font-mono mb-1">Total Analyzed</dt>
+              <dd className="text-2xl font-bold text-cyan-400 font-mono">{stats.total}</dd>
             </div>
             <div className="bg-gray-900/40 backdrop-blur-sm rounded-lg border border-red-500/20 p-3">
-              <div className="text-xs text-gray-500 font-mono mb-1">Attacks Detected</div>
-              <div className="text-2xl font-bold text-red-400 font-mono">{stats.attacks}</div>
+              <dt className="text-xs text-gray-500 font-mono mb-1">Attacks Detected</dt>
+              <dd className="text-2xl font-bold text-red-400 font-mono">{stats.attacks}</dd>
             </div>
             <div className="bg-gray-900/40 backdrop-blur-sm rounded-lg border border-purple-500/20 p-3">
-              <div className="text-xs text-gray-500 font-mono mb-1">Normal Traffic</div>
-              <div className="text-2xl font-bold text-purple-400 font-mono">
+              <dt className="text-xs text-gray-500 font-mono mb-1">Normal Traffic</dt>
+              <dd className="text-2xl font-bold text-purple-400 font-mono">
                 {stats.total - stats.attacks}
-              </div>
+              </dd>
             </div>
-          </div>
+          </dl>
         </motion.header>
 
         {/* Main Dashboard */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           {/* Left Panel - Input */}
-          <motion.div
+          <motion.section
+            aria-labelledby="connection-input-heading"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
@@ -131,19 +132,20 @@ export default function App() {
           >
             <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
 
-            <h2 className="text-xl font-mono text-cyan-400 mb-4 flex items-center gap-2">
-              <Activity className="w-5 h-5" />
+            <h2 id="connection-input-heading" className="text-xl font-mono text-cyan-400 mb-4 flex items-center gap-2">
+              <Activity className="w-5 h-5" aria-hidden="true" />
               CONNECTION INPUT
               <span className="text-xs text-purple-400 font-normal ml-auto">Key Features Only</span>
             </h2>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-xs text-gray-400 font-mono mb-2 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                <label htmlFor="duration" className="block text-xs text-gray-400 font-mono mb-2 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-cyan-400" aria-hidden="true" />
                   DURATION (seconds)
                 </label>
                 <input
+                  id="duration"
                   type="number"
                   value={formData.duration}
                   onChange={(e) => handleInputChange('duration', e.target.value)}
@@ -152,11 +154,12 @@ export default function App() {
               </div>
 
               <div>
-                <label className="block text-xs text-gray-400 font-mono mb-2 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                <label htmlFor="protocol_type" className="block text-xs text-gray-400 font-mono mb-2 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-cyan-400" aria-hidden="true" />
                   PROTOCOL TYPE
                 </label>
                 <select
+                  id="protocol_type"
                   value={formData.protocol_type}
                   onChange={(e) => handleInputChange('protocol_type', e.target.value)}
                   className="w-full bg-gray-950/50 border border-cyan-500/30 rounded-lg px-4 py-3 text-white focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 focus:outline-none transition-all font-mono text-lg cursor-pointer"
@@ -169,11 +172,12 @@ export default function App() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs text-gray-400 font-mono mb-2 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                  <label htmlFor="src_bytes" className="block text-xs text-gray-400 font-mono mb-2 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-cyan-400" aria-hidden="true" />
                     SRC BYTES
                   </label>
                   <input
+                    id="src_bytes"
                     type="number"
                     value={formData.src_bytes}
                     onChange={(e) => handleInputChange('src_bytes', e.target.value)}
@@ -181,11 +185,12 @@ export default function App() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-400 font-mono mb-2 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                  <label htmlFor="dst_bytes" className="block text-xs text-gray-400 font-mono mb-2 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-cyan-400" aria-hidden="true" />
                     DST BYTES
                   </label>
                   <input
+                    id="dst_bytes"
                     type="number"
                     value={formData.dst_bytes}
                     onChange={(e) => handleInputChange('dst_bytes', e.target.value)}
@@ -196,11 +201,12 @@ export default function App() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs text-gray-400 font-mono mb-2 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                  <label htmlFor="count" className="block text-xs text-gray-400 font-mono mb-2 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-cyan-400" aria-hidden="true" />
                     COUNT
                   </label>
                   <input
+                    id="count"
                     type="number"
                     value={formData.count}
                     onChange={(e) => handleInputChange('count', e.target.value)}
@@ -208,11 +214,12 @@ export default function App() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-400 font-mono mb-2 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-red-400" />
+                  <label htmlFor="num_failed_logins" className="block text-xs text-gray-400 font-mono mb-2 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-red-400" aria-hidden="true" />
                     FAILED LOGINS
                   </label>
                   <input
+                    id="num_failed_logins"
                     type="number"
                     value={formData.num_failed_logins}
                     onChange={(e) => handleInputChange('num_failed_logins', e.target.value)}
@@ -222,11 +229,12 @@ export default function App() {
               </div>
 
               <div>
-                <label className="block text-xs text-gray-400 font-mono mb-2 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-purple-400" />
+                <label htmlFor="serror_rate" className="block text-xs text-gray-400 font-mono mb-2 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-purple-400" aria-hidden="true" />
                   SERROR RATE
                 </label>
                 <input
+                  id="serror_rate"
                   type="number"
                   step="0.01"
                   min="0"
@@ -244,11 +252,12 @@ export default function App() {
               </div>
 
               <div>
-                <label className="block text-xs text-gray-400 font-mono mb-2 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                <label htmlFor="dst_host_count" className="block text-xs text-gray-400 font-mono mb-2 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-cyan-400" aria-hidden="true" />
                   DST HOST COUNT
                 </label>
                 <input
+                  id="dst_host_count"
                   type="number"
                   value={formData.dst_host_count}
                   onChange={(e) => handleInputChange('dst_host_count', e.target.value)}
@@ -278,9 +287,9 @@ export default function App() {
             </motion.button>
 
             {apiError && (
-              <div className="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+              <div role="alert" className="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
                 <div className="text-xs text-red-300 font-mono flex items-center gap-2">
-                  <AlertTriangle className="w-3 h-3" />
+                  <AlertTriangle className="w-3 h-3" aria-hidden="true" />
                   {apiError}
                 </div>
               </div>
@@ -288,24 +297,25 @@ export default function App() {
 
             <div className="mt-4 p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
               <div className="text-xs text-purple-300 font-mono flex items-center gap-2">
-                <Shield className="w-3 h-3" />
+                <Shield className="w-3 h-3" aria-hidden="true" />
                 Binary classification — Normal or Attack detection using ML model.
               </div>
             </div>
-          </motion.div>
+          </motion.section>
 
           {/* Right Panel - Results */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-            className="space-y-6"
-          >
+          <div className="space-y-6">
             {/* Prediction Result */}
-            <div className="bg-gray-900/40 backdrop-blur-sm rounded-lg border border-cyan-500/20 p-6 relative overflow-hidden">
+            <motion.section
+              aria-labelledby="prediction-result-heading"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 }}
+              className="bg-gray-900/40 backdrop-blur-sm rounded-lg border border-cyan-500/20 p-6 relative overflow-hidden"
+            >
               <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
 
-              <h2 className="text-xl font-mono text-cyan-400 mb-4">PREDICTION RESULT</h2>
+              <h2 id="prediction-result-heading" className="text-xl font-mono text-cyan-400 mb-4">PREDICTION RESULT</h2>
 
               {result ? (
                 <motion.div
@@ -322,11 +332,11 @@ export default function App() {
                     <div className="flex items-center gap-4 mb-4">
                       {result.status === 'normal' ? (
                         <div className="p-3 rounded-full bg-emerald-500/20">
-                          <Shield className="w-10 h-10 text-emerald-400" />
+                          <Shield className="w-10 h-10 text-emerald-400" aria-hidden="true" />
                         </div>
                       ) : (
                         <div className="p-3 rounded-full bg-red-500/20">
-                          <AlertTriangle className="w-10 h-10 text-red-400" />
+                          <AlertTriangle className="w-10 h-10 text-red-400" aria-hidden="true" />
                         </div>
                       )}
                       <div>
@@ -351,7 +361,14 @@ export default function App() {
                           {(result.confidence * 100).toFixed(1)}%
                         </span>
                       </div>
-                      <div className="w-full h-3 bg-gray-800 rounded-full overflow-hidden">
+                      <div
+                        role="progressbar"
+                        aria-valuenow={Math.round(result.confidence * 100)}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                        aria-label="Model confidence"
+                        className="w-full h-3 bg-gray-800 rounded-full overflow-hidden"
+                      >
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${result.confidence * 100}%` }}
@@ -376,7 +393,7 @@ export default function App() {
                       <div>
                         <div className="flex justify-between text-xs font-mono mb-1">
                           <span className="text-emerald-400 flex items-center gap-1">
-                            <Shield className="w-3 h-3" /> Normal
+                            <Shield className="w-3 h-3" aria-hidden="true" /> Normal
                           </span>
                           <span className="text-emerald-400">
                             {result.status === 'normal'
@@ -402,7 +419,7 @@ export default function App() {
                       <div>
                         <div className="flex justify-between text-xs font-mono mb-1">
                           <span className="text-red-400 flex items-center gap-1">
-                            <AlertTriangle className="w-3 h-3" /> Attack
+                            <AlertTriangle className="w-3 h-3" aria-hidden="true" /> Attack
                           </span>
                           <span className="text-red-400">
                             {result.status === 'attack'
@@ -428,36 +445,40 @@ export default function App() {
                 </motion.div>
               ) : (
                 <div className="text-center text-gray-500 py-12 font-mono">
-                  <Activity className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                  <Activity className="w-12 h-12 mx-auto mb-3 opacity-50" aria-hidden="true" />
                   <div>Awaiting connection data...</div>
                   <div className="text-xs mt-2 opacity-60">Fill in the features and click Analyze</div>
                 </div>
               )}
-            </div>
+            </motion.section>
 
             {/* Network Visualization */}
-            <div className="bg-gray-900/40 backdrop-blur-sm rounded-lg border border-cyan-500/20 p-6 relative overflow-hidden">
+            <section
+              aria-labelledby="network-visualization-heading"
+              className="bg-gray-900/40 backdrop-blur-sm rounded-lg border border-cyan-500/20 p-6 relative overflow-hidden"
+            >
               <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
-              <h2 className="text-xl font-mono text-cyan-400 mb-4">NETWORK VISUALIZATION</h2>
+              <h2 id="network-visualization-heading" className="text-xl font-mono text-cyan-400 mb-4">NETWORK VISUALIZATION</h2>
               <div className="w-full h-64 rounded-lg overflow-hidden bg-gray-950/50">
                 <NetworkGraph
                   isActive={isAnalyzing}
                   threatLevel={result?.status || 'normal'}
                 />
               </div>
-            </div>
-          </motion.div>
+            </section>
+          </div>
         </div>
 
         {/* Activity Log */}
-        <motion.div
+        <motion.section
+          aria-label="Activity log"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
           <ActivityLog newEntry={newLogEntry} />
-        </motion.div>
-      </div>
-    </div>
+        </motion.section>
+      </main>
+
   );
 }
