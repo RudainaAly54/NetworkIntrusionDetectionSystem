@@ -1,124 +1,106 @@
 import axios from 'axios';
 
-// Configuration
+// Keep axios in case you want to switch back later
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-// axios instance
 const apiClient = axios.create({
-    baseURL: API_BASE_URL,
-    timeout: 30000,
-    headers: {
-        'Content-Type': 'application/json',
-    },
+  baseURL: API_BASE_URL,
 });
 
-// Request Interceptor
-apiClient.interceptors.request.use(
-    (config) => config,
-    (error) => Promise.reject(error)
-);
+// Toggle this
+const USE_MOCK = true;
 
-// Response Interceptor
-apiClient.interceptors.response.use(
-    (response) => response,
-    (error) => {
-        if (error.response) {
-            console.error('API Error:', error.response.data);
-        } else if (error.request) {
-            console.error('Network Error:', error.message);
-        } else {
-            console.error('Error:', error.message);
-        }
-        return Promise.reject(error);
-    }
-);
+// ---------------------- MOCK DATA ----------------------
 
-// API Methods
+const attackTypes = [
+  "DoS",
+  "Probe",
+  "R2L",
+  "U2R",
+  "Normal"
+];
 
 export const predictConnection = async (data) => {
-    // The frontend only collects 8 key features.
-    // We fill the remaining 31 with safe defaults before sending to the backend.
-    // Note: num_outbound_cmds and is_host_login are dropped by the backend — removed from payload.
-    const response = await apiClient.post('/api/predict', {
-        // ── 8 features from the form ──────────────────────────────────────
-        duration:          data.duration          ?? 0,
-        protocol_type:     data.protocol_type     ?? 'tcp',
-        src_bytes:         data.src_bytes         ?? 0,
-        dst_bytes:         data.dst_bytes         ?? 0,
-        count:             data.count             ?? 0,
-        num_failed_logins: data.num_failed_logins ?? 0,
-        serror_rate:       data.serror_rate       ?? 0.0,
-        dst_host_count:    data.dst_host_count    ?? 0,
 
-        // ── remaining 31 features — safe neutral defaults ─────────────────
-        service:                      'http',
-        flag:                         'SF',
-        land:                         0,
-        wrong_fragment:               0,
-        urgent:                       0,
-        hot:                          0,
-        logged_in:                    1,
-        num_compromised:              0,
-        root_shell:                   0,
-        su_attempted:                 0,
-        num_root:                     0,
-        num_file_creations:           0,
-        num_shells:                   0,
-        num_access_files:             0,
-        is_guest_login:               0,
-        srv_count:                    data.count       ?? 0,
-        srv_serror_rate:              data.serror_rate ?? 0.0,
-        rerror_rate:                  0.0,
-        srv_rerror_rate:              0.0,
-        same_srv_rate:                1.0,
-        diff_srv_rate:                0.0,
-        srv_diff_host_rate:           0.0,
-        dst_host_srv_count:           data.dst_host_count ?? 0,
-        dst_host_same_srv_rate:       1.0,
-        dst_host_diff_srv_rate:       0.0,
-        dst_host_same_src_port_rate:  0.0,
-        dst_host_srv_diff_host_rate:  0.0,
-        dst_host_serror_rate:         data.serror_rate ?? 0.0,
-        dst_host_srv_serror_rate:     data.serror_rate ?? 0.0,
-        dst_host_rerror_rate:         0.0,
-        dst_host_srv_rerror_rate:     0.0,
-    });
+  if (!USE_MOCK) {
+    // Put your real API code here later
+  }
 
-    const r = response.data;
-    // r = { prediction, is_attack, confidence, probabilities: { Normal, Attack } }
+  const isAttack = Math.random() > 0.35;
 
-    // Map backend response → shape the frontend expects
-    return {
-        status:     r.is_attack ? 'attack' : 'normal',
-        attackType: r.is_attack ? 'Attack' : undefined,
-        confidence: r.confidence,
+  const confidence = Number((95 + Math.random() * 4.8).toFixed(2));
 
-        // Frontend renders a bar chart for each key in attackProbabilities
-        attackProbabilities: {
-            Normal: r.probabilities.Normal,
-            Attack: r.probabilities.Attack,
+  return {
+    status: isAttack ? "attack" : "normal",
+
+    attackType: isAttack
+      ? attackTypes[Math.floor(Math.random() * 4)]
+      : undefined,
+
+    confidence,
+
+    attackProbabilities: isAttack
+      ? {
+          Normal: Number((Math.random() * 0.2).toFixed(2)),
+          Attack: Number((0.8 + Math.random() * 0.2).toFixed(2)),
+        }
+      : {
+          Normal: Number((0.8 + Math.random() * 0.2).toFixed(2)),
+          Attack: Number((Math.random() * 0.2).toFixed(2)),
         },
 
-        timestamp:      new Date().toISOString(),
-        processingTime: null,
-    };
+    timestamp: new Date().toISOString(),
+
+    processingTime: `${(20 + Math.random() * 60).toFixed(1)} ms`,
+  };
 };
 
 export const getModelStatus = async () => {
-    const response = await apiClient.get('/api/model-info');
-    const r = response.data;
 
-    return {
-        online:       true,
-        modelVersion: `${r.chosen_kernel}-svm-pca${r.n_pca_components}`,
-        accuracy:     parseFloat((r.test_acc * 100).toFixed(2)),
-        lastUpdated:  new Date().toISOString(),
-    };
+  if (!USE_MOCK) {
+    // Real request later
+  }
+
+  return {
+    online: true,
+    modelVersion: "RBF-SVM-PCA39",
+    accuracy: 99.37,
+    lastUpdated: new Date().toISOString(),
+  };
 };
 
 export const getPredictionHistory = async () => {
-    // History is tracked in frontend state, not stored in backend
-    return [];
+
+  return [
+    {
+      status: "normal",
+      confidence: 98.7,
+      timestamp: "2026-08-03T09:10:00Z",
+    },
+    {
+      status: "attack",
+      attackType: "DoS",
+      confidence: 99.12,
+      timestamp: "2026-08-03T09:12:00Z",
+    },
+    {
+      status: "attack",
+      attackType: "Probe",
+      confidence: 97.91,
+      timestamp: "2026-08-03T09:15:00Z",
+    },
+    {
+      status: "normal",
+      confidence: 96.84,
+      timestamp: "2026-08-03T09:18:00Z",
+    },
+    {
+      status: "attack",
+      attackType: "R2L",
+      confidence: 98.56,
+      timestamp: "2026-08-03T09:22:00Z",
+    },
+  ];
 };
 
 export default apiClient;
